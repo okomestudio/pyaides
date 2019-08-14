@@ -16,21 +16,25 @@ def _fstream(text):
 
 @pytest.fixture
 def textfile1():
-    with _fstream("1\n2\n3") as f:
+    with _fstream("1\n22\n333\n4444") as f:
         yield f
 
 
 @pytest.fixture
 def textfile2():
-    with _fstream("1\n2\n3\n") as f:
+    with _fstream("1\n22\n333\n4444\n") as f:
         yield f
 
 
 class TestTail:
-    def test_tail1(self, textfile1):
-        n = 2
-        assert tail(textfile1, n) == b"3"
+    @pytest.mark.parametrize(
+        "n, expected", [(1, b"4444"), (2, b"333\n4444"), (3, b"22\n333\n4444")]
+    )
+    def test_tail1(self, n, expected, textfile1):
+        assert tail(textfile1, n) == expected
 
-    def test_tail2(self, textfile2):
-        n = 2
-        assert tail(textfile2, n) == b"3"
+    @pytest.mark.parametrize(
+        "n, expected", [(1, b"4444"), (2, b"333\n4444"), (3, b"22\n333\n4444")]
+    )
+    def test_tail2(self, n, expected, textfile2):
+        assert tail(textfile2, n) == expected
