@@ -4,12 +4,27 @@ from os import SEEK_END
 def tail(stream: "file", n: int = 10, block_size: int = 1024):
     """Output the last part of the file.
 
+    This function behaves like the Unix `tail` command, but not all options have been
+    implemented.
+
     Args:
-        stream:
+        stream: File stream.
+
+        n: Number of lines to output.
+
+        block_size: Number of bytes to read at once. The optimum number depends on the
+            file size and the average line length.
 
     Return:
         str: The last part of the file.
     """
+    if not block_size > 0:
+        raise ValueError("block_size must be a positive integer")
+    if n == 0:
+        return b""
+    elif not n > 0:
+        raise ValueError("n must be a positive integer")
+
     lines = []
     eol = b"\n"
     suffix = b""
@@ -33,19 +48,18 @@ def tail(stream: "file", n: int = 10, block_size: int = 1024):
         stream.seek(seek_offset, SEEK_END)
         buf = stream.read(block_size)
 
-        # Search for line end.
-        # if ignore_ending_newline and seek_offset == -block_size and buf[-1] == eol:
-        #    buf = buf[:-1]
-
         pos = buf.rfind(eol)
         if pos != -1:
             # EOL found
             suffix = buf[pos + 1 :] + suffix
-            seek_offset = seek_offset + pos
 
-            # If the line is empty and at the end of the file, skip until non-empty line
-            # is found
-            if len(lines) == 0 and suffix == b"":
+            # Move the offset to the position of EOL just found
+            seek_offset += pos
+
+            if seek_offset + 1 == 0 and suffix == b"":
+                # If this is an EOL at the end of the file, `tail` keeps it so we do so
+                # as well
+                suffix = eol
                 continue
 
             lines.append(suffix)
