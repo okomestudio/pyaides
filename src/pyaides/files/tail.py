@@ -48,27 +48,26 @@ def tail(stream: "file", n: int = 10, block_size: int = 1024):
         stream.seek(seek_offset, SEEK_END)
         buf = stream.read(block_size)
 
-        pos = buf.rfind(eol)
-        if pos != -1:
-            # EOL found
-            suffix = buf[pos + 1 :] + suffix
+        while 1:
+            pos = buf.rfind(eol)
+            if pos != -1:
+                # EOL found
+                suffix = buf[pos + 1 :] + suffix
+                buf = buf[:pos]
 
-            # Move the offset to the position of EOL just found
-            seek_offset += pos
-
-            if seek_offset + 1 == 0 and suffix == b"":
-                # If this is an EOL at the end of the file, `tail` keeps it so we do so
-                # as well
-                suffix = eol
-                continue
-
-            lines.append(suffix)
-            suffix = b""
-            n -= 1
-            if n == 0:
-                return eol.join(lines[::-1])
-        else:
-            suffix = buf + suffix
+                if seek_offset + pos + 1 == 0 and suffix == b"":
+                    # If this is an EOL at the end of the file, `tail` keeps it so we do
+                    # so as well
+                    suffix = eol
+                else:
+                    lines.append(suffix)
+                    suffix = b""
+                    n -= 1
+                    if n == 0:
+                        return eol.join(lines[::-1])
+            else:
+                suffix = buf + suffix
+                break
 
     # One-line file
     lines.append(suffix)
