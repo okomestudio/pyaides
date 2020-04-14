@@ -103,6 +103,3 @@ venv.bak/
 
 # mypy
 .mypy_cache/
-
-# Misc.
-.dir-locals.el
