@@ -23,4 +23,4 @@ exclude = '''
 
 [tool.isort]
 line_length = 88
-force_single_line = True
+force_single_line = true
