@@ -1,4 +1,4 @@
 __author__ = "Taro Sato"
 __author_email__ = "okomestudio@gmail.com"
-__version__ = "19.8.30"
+__version__ = "20.4.0a.dev0"
 __license__ = "MIT"
