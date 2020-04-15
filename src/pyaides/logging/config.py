@@ -1,16 +1,16 @@
 import logging
 import logging.handlers
 import threading
+from itertools import zip_longest
 from logging import _STYLES
 from logging import Formatter
-from itertools import zip_longest
+
+from .filters import LoggingFilter
 
 try:
     from raven.handlers.logging import SentryHandler
 except ImportError:
     SentryHandler = None
-
-from .filters import LoggingFilter
 
 
 _lock = threading.RLock()
@@ -29,7 +29,7 @@ def _release_lock():
 root = logging.root
 
 
-def config(**kwargs):
+def basic_config(**kwargs):
     """Do basic configuration of the logging system.
 
     This function extends built-in :func:`logging.basicConfig` to add features mainly
@@ -147,7 +147,7 @@ def _set_level(handler, level):
         if isinstance(level, str):
             level = level.upper()
         elif not isinstance(level, int):
-            raise ValueError("Logging level must be an int or str")
+            raise TypeError("Logging level must be an int or str")
         handler.setLevel(level)
 
 
