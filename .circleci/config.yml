@@ -126,7 +126,7 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            version=$(python -c "import socket_log_receiver as m; print(m.__version__)")
+            version=$(python -c "import pyaides as m; print(m.__version__)")
             [ v$version = $CIRCLE_TAG ]
       - run:
           name: Create distribution package
