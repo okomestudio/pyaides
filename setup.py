@@ -59,6 +59,6 @@ setup(
     install_requires=requires,
     setup_requires=setup_requires,
     tests_require=tests_require,
-    extras_require={"dev": dev_requires + tests_require, "test": tests_require},
+    extras_require={"dev": dev_requires + tests_require, "tests": tests_require},
     entry_points={},
 )
