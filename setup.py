@@ -20,17 +20,24 @@ def meta(category, fpath="src/pyaides/__init__.py"):
 
 
 requires = []
+aws_requires = ["boto3>=1.14.20"]
 
-setup_requires = ["pytest-runner==4.4"]
+setup_requires = ["pytest-runner==5.2"]
 
-dev_requires = ["black>=18.9b0", "flake8", "isort", "pre-commit"]
+dev_requires = [
+    "black>=19.10b0",
+    "flake8>=3.8.3",
+    "isort>=5.0.9",
+    "pre-commit>=2.6.0",
+] + aws_requires
 
 tests_require = [
-    "coverage>=4.5.2",
-    "pytest>=4.2.1",
-    "pytest-cov>=2.6.1",
-    "pytest-mock>=1.10.4",
-]
+    "coverage>=5.2",
+    "moto>==1.3.14",
+    "pytest>=5.4.3",
+    "pytest-cov>=2.10.0",
+    "pytest-mock>=3.2.0",
+] + aws_requires
 
 setup(
     name="pyaides",
@@ -59,6 +66,10 @@ setup(
     install_requires=requires,
     setup_requires=setup_requires,
     tests_require=tests_require,
-    extras_require={"dev": dev_requires + tests_require, "tests": tests_require},
+    extras_require={
+        "aws": aws_requires,
+        "dev": dev_requires + tests_require,
+        "tests": tests_require,
+    },
     entry_points={},
 )
