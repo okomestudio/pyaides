@@ -71,5 +71,7 @@ setup(
         "dev": dev_requires + tests_require,
         "tests": tests_require,
     },
-    entry_points={},
+    entry_points={
+        "console_scripts": ["sqs-delete-queues=pyaides.aws.sqs.sqs:CLI.delete_queues"]
+    },
 )
